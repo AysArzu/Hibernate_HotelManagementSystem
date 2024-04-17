@@ -1,6 +1,10 @@
 package com.tpe.controller;
 
 import com.tpe.config.HibernateUtils;
+import com.tpe.repository.HotelRepository;
+import com.tpe.repository.RoomRepository;
+import com.tpe.service.HotelService;
+import com.tpe.service.RoomService;
 
 import java.util.Scanner;
 
@@ -8,8 +12,14 @@ public class HotelManagementSystem {
 
     private static Scanner scanner = new Scanner(System.in);
 
+
     //ana menü
     public static void displayHotelManagementSystemMenu() {
+        //sadece 1 tane hotelrepo olusturduk, tum uygulamada kullanabiliriz.
+        HotelRepository hotelRepository = new HotelRepository();
+        HotelService hotelService = new HotelService(hotelRepository);
+        RoomRepository roomRepository = new RoomRepository();
+        RoomService roomService = new RoomService(roomRepository);
 
         boolean exit = false;
 
@@ -27,10 +37,10 @@ public class HotelManagementSystem {
 
             switch (choice) {
                 case 1:
-                    displayHotelOperationsMenu();
+                    displayHotelOperationsMenu(hotelService);
                     break;
                 case 2:
-                    displayRoomOperationsMenu();
+                    displayRoomOperationsMenu(roomService);
                     break;
                 case 3:
                     displayGuestOperationsMenu();
@@ -39,7 +49,7 @@ public class HotelManagementSystem {
                     displayReservationOperationsMenu();
                     break;
                 case 0:
-                    exit=true;
+                    exit = true;
                     System.out.println("Good Bye...");
                     HibernateUtils.shutdown();
                     break;
@@ -54,8 +64,8 @@ public class HotelManagementSystem {
     }
 
     //hotel operations
-    private static void displayHotelOperationsMenu() {
-
+    private static void displayHotelOperationsMenu(HotelService hotelService) {
+        //yeni obje uretmek yerine parametre verdik
         System.out.println("Hotel Operation Menu");
 
         boolean exit = false;
@@ -74,16 +84,22 @@ public class HotelManagementSystem {
 
             switch (choice) {
                 case 1:
-                 //1-a : save hotel
+                    //1-a : save hotel
+                    hotelService.saveHotel();
                     break;
                 case 2:
-
+                    //2-a hotel bulma
+                    System.out.println("Enter hotel ID");
+                    Long id = scanner.nextLong();
+                    scanner.nextLine();
+                    hotelService.findHotelById(id);
                     break;
                 case 3:
 
                     break;
                 case 4:
-
+                    //4-a tum otelleri bulma
+                    hotelService.getAllHotels();
                     break;
                 case 5:
 
@@ -101,7 +117,7 @@ public class HotelManagementSystem {
     }
 
     //room operations
-    private static void displayRoomOperationsMenu() {
+    private static void displayRoomOperationsMenu(RoomService roomService) {
 
 
         System.out.println("Room Operation Menu");
@@ -120,16 +136,20 @@ public class HotelManagementSystem {
 
             switch (choice) {
                 case 1:
-
+                    roomService.saveRoom();
                     break;
                 case 2:
-
+                    //2-a room bulma
+                    System.out.println("Enter room ID");
+                    Long id = scanner.nextLong();
+                    scanner.nextLine();
+                    roomService.findRoomById(id);
                     break;
                 case 3:
 
                     break;
                 case 4:
-
+                    roomService.getAllRooms();
                     break;
                 case 0:
                     exit = true;
