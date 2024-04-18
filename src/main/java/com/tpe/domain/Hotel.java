@@ -16,7 +16,9 @@ public class Hotel {
     @Column(nullable = false)
     private String location;
 
-    //todo : one-to-many
+    //todo: one-to-many
+    @OneToMany(mappedBy = "hotel")//hotel ile room arasinda iliski kurulmasini saglar=> iliski tablosu ekler 3. tablo olusur
+//mappedBy yazinca ekstra tablo olusmasini engelledik. iliskiyi eslestirdik
     private List<Room> rooms = new ArrayList<>();
 
     //hibernate data cekerken(fetch yaparken) default constructori kullanir.

@@ -5,13 +5,11 @@ import com.tpe.repository.HotelRepository;
 import com.tpe.repository.RoomRepository;
 import com.tpe.service.HotelService;
 import com.tpe.service.RoomService;
-
 import java.util.Scanner;
 
 public class HotelManagementSystem {
 
     private static Scanner scanner = new Scanner(System.in);
-
 
     //ana menü
     public static void displayHotelManagementSystemMenu() {
@@ -19,7 +17,7 @@ public class HotelManagementSystem {
         HotelRepository hotelRepository = new HotelRepository();
         HotelService hotelService = new HotelService(hotelRepository);
         RoomRepository roomRepository = new RoomRepository();
-        RoomService roomService = new RoomService(roomRepository);
+        RoomService roomService = new RoomService(hotelService,roomRepository);
 
         boolean exit = false;
 
@@ -141,9 +139,9 @@ public class HotelManagementSystem {
                 case 2:
                     //2-a room bulma
                     System.out.println("Enter room ID");
-                    Long id = scanner.nextLong();
+                    Long roomId = scanner.nextLong();
                     scanner.nextLine();
-                    roomService.findRoomById(id);
+                    roomService.findRoomById(roomId);
                     break;
                 case 3:
 
