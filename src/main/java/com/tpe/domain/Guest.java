@@ -1,26 +1,41 @@
 package com.tpe.domain;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
 @Table(name = "t_guest")
 public class Guest {
-    @Id
+
+
+    @Id//pk
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String name;
-
-    //todo:
     private LocalDateTime createDate;
-    //todo:
-    private List<Reservation> reservation = new ArrayList<>();
+
+    @OneToMany(mappedBy = "guest",orphanRemoval = true)//tablo ile ilişkiyi kurar:gerek yok
+    private List<Reservation> reservations=new ArrayList<>();
+
+//    private String street;
+//    private String city;
+//    private String country;
+//    private int zipcode;
 
     @Embedded
     private Address address;
+
+    @PrePersist
+    public void prePersist(){
+        this.createDate=LocalDateTime.now();
+    }
+
+    //getter-setter
+
 
     public Long getId() {
         return id;
@@ -42,16 +57,16 @@ public class Guest {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
+//    public void setCreateDate(LocalDateTime createDate) {
+//        this.createDate = createDate;
+//    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
     }
 
-    public List<Reservation> getReservation() {
-        return reservation;
-    }
-
-    public void setReservation(List<Reservation> reservation) {
-        this.reservation = reservation;
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 
     public Address getAddress() {

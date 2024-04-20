@@ -1,5 +1,4 @@
 package com.tpe.domain;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +6,9 @@ import java.util.List;
 @Entity
 @Table(name = "t_room")
 public class Room {
+
     @Id
-    private Long id;
+    private Long id;//PK
 
     @Column(nullable = false)
     private String number;
@@ -16,13 +16,14 @@ public class Room {
     @Column(nullable = false)
     private Integer capacity;
 
-    //todo: many to one
-    @ManyToOne//room ile hotel arasinda iliski kurulmasini saglar:room tablosunda FK(hotel_id) ekler
-    @JoinColumn(name="hotel_id",nullable = false)//opsiyonel
+
+    @ManyToOne//room ile hotel arasında ilişki kurulmasını sağlar:room tablosuna FK(hotel_id) ekler
+    @JoinColumn(name = "hotel_id",nullable = false)//opsiyonel
     private Hotel hotel;
 
-    //todo:one-to-many
-    private List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "room",orphanRemoval = true)
+    private List<Reservation> reservations=new ArrayList<>();
 
     public Room() {
     }
@@ -33,7 +34,9 @@ public class Room {
         this.capacity = capacity;
         this.hotel = hotel;
     }
-//getters and setters
+
+    //getter-setter
+
     public Long getId() {
         return id;
     }
@@ -73,7 +76,8 @@ public class Room {
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
     }
-    //toString()
+
+    //toString
 
     @Override
     public String toString() {

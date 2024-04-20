@@ -1,5 +1,4 @@
 package com.tpe.domain;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +6,8 @@ import java.util.List;
 @Entity
 @Table(name = "t_hotel")
 public class Hotel {
-    @Id
+
+    @Id//primary key
     private Long id;
 
     @Column(nullable = false)
@@ -16,23 +16,33 @@ public class Hotel {
     @Column(nullable = false)
     private String location;
 
-    //todo: one-to-many
-    @OneToMany(mappedBy = "hotel")//hotel ile room arasinda iliski kurulmasini saglar=> iliski tablosu ekler 3. tablo olusur
-//mappedBy yazinca ekstra tablo olusmasini engelledik. iliskiyi eslestirdik
-    private List<Room> rooms = new ArrayList<>();
+    //orphanRemoval
+    //A otelinin odaları: 11,12,13
+    //A otelinin oda listesinden 11 i çıkarırsam:room tabledan 11 i siler
 
-    //hibernate data cekerken(fetch yaparken) default constructori kullanir.
+    //cascade:
+    //A otelinin odaları: 11,12,13
+    //A otelinin oda listesinden 11 i çıkarırsam:room tableda 11 hala var
+
+
+    @OneToMany(mappedBy = "hotel",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)//hotel ile room arasında ilişki kurulmasını sağlar: ilişki tablosu ekler
+    private List<Room> rooms=new ArrayList<>();
+
+    //hibernate data çekerken(fetch) default constructorı kullanır.
     public Hotel() {
     }
 
-    //param constructor
+    //param const
+
     public Hotel(Long id, String name, String location) {
         this.id = id;
         this.name = name;
         this.location = location;
     }
 
-    //getters and setters
+
+    //getter-setter
+
 
     public Long getId() {
         return id;
